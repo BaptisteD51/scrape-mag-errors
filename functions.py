@@ -17,15 +17,20 @@ def get_source_code(url):
     return res.text
 
 
-def get_headers(source):
+def get_links(source):
     soup = BeautifulSoup(source, 'html.parser')
-    headers = soup.select("h2")
-    for index, header in enumerate(headers):
-        header = header.getText()
-        headers[index] = header
-    return headers
+    links = soup.select("a")
+    urls = []
+    for link in links:
+        urls.append(link["href"])
+    return urls
 
 
-def header_is_broken(header):
-    regex = r" [a-zA-Z]{1}$"
-    return re.search(regex, header) != None
+def url_ok(url):
+    res = requests.get(url)
+    return res.ok
+
+
+def filter_ok(links):
+    links = filter(url_ok,links)
+    return list(links)
