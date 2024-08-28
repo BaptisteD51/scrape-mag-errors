@@ -27,10 +27,29 @@ def get_links(source):
 
 
 def url_ok(url):
+    print(url)
     res = requests.get(url)
-    return res.ok
+    return not res.ok
+
+
+def is_valid(url):
+    print(url)
+    if "http" in url:
+        return True
+
+
+def filter_links(links):
+    links = filter(is_valid, links)
+    return list(links)
 
 
 def filter_ok(links):
     links = filter(url_ok,links)
     return list(links)
+
+
+try:
+    requests.get("https://zooplus.fer/magasin")
+    print("it works")
+except:
+    print("Doesnt' work")
